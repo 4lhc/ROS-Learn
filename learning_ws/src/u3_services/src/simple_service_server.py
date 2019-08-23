@@ -10,7 +10,7 @@
 
 
 import rospy
-from U3_services.srv import CustomServiceMessage, CustomServiceMessageResponse
+from u3_services.srv import CustomServiceMessage, CustomServiceMessageResponse
 
 
 rospy.init_node('simple_service_server')

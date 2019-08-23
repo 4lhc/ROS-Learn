@@ -1,5 +1,5 @@
 <launch>
-<node pkg="U3_services"
+<node pkg="u3_services"
       name="move_bb8_service_server"
       type="bb8_circle_server.py"
       output="screen">

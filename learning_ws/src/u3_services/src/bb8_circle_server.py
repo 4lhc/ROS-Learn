@@ -13,7 +13,7 @@
 
 import rospy
 from geometry_msgs.msg import Twist
-from U3_services.srv import DurationMessage, DurationMessageResponse
+from u3_services.srv import DurationMessage, DurationMessageResponse
 
 rospy.init_node('move_bb8_service_server')
 cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)

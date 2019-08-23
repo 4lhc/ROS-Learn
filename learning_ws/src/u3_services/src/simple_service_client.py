@@ -9,7 +9,7 @@
 #  ver    :
 
 import rospy
-from U3_services.srv import CustomServiceMessage, CustomServiceMessageRequest
+from u3_services.srv import CustomServiceMessage, CustomServiceMessageRequest
 
 rospy.init_node('simple_service_client')
 rospy.wait_for_service('/get_name_len')

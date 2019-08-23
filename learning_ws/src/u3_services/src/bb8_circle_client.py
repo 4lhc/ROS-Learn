@@ -10,7 +10,7 @@
 #  Client to call /move_bb8_in_circle service
 
 import rospy
-from U3_services.srv import DurationMessage, DurationMessageRequest
+from u3_services.srv import DurationMessage, DurationMessageRequest
 
 rospy.init_node('move_bb8_service_client')
 
