@@ -1,0 +1,7 @@
+<launch>
+<node pkg="U3_services"
+      name="move_bb8_service_client"
+      type="bb8_circle_client.py"
+      output="screen">
+</node>
+</launch>
