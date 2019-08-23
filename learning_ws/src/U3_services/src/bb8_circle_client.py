@@ -14,12 +14,15 @@ from U3_services.srv import DurationMessage, DurationMessageRequest
 
 rospy.init_node('move_bb8_service_client')
 
-
+serv_name = '/move_bb8_in_circle'
+rospy.loginfo("Waiting for service %s", serv_name)
 rospy.wait_for_service('/move_bb8_in_circle')
-duration_srv = rospy.ServiceProxy('/move_bb8_in_circle', DurationMessage)
+rospy.loginfo("%s service available", serv_name)
+duration_srv = rospy.ServiceProxy(serv_name, DurationMessage)
 
 move_req = DurationMessageRequest(duration=20)
 move_resp = duration_srv(move_req)
 # move_resp = duration_srv(duration=20)
-print("Got Response: {}".format(move_resp))
+rospy.loginfo("Got Response: %s", move_resp)
+# print("Got Response: {}".format(move_resp))
 

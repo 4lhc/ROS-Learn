@@ -19,16 +19,16 @@ rospy.init_node('move_bb8_service_server')
 cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
 def service_callback(request):
     global cmd_vel_pub
-    print("Request from {} recieved".format(request._connection_header['callerid']))
-    print("Duration: {}".format(request.duration))
-    print("Starting circular motion...")
+    rospy.loginfo("Reques from %s received", request._connection_header['callerid'])
+    rospy.loginfo("Duration: %d", request.duration)
+    rospy.loginfo("Starting circular motion...")
     cmd_vel = Twist()
     cmd_vel.linear.x = 0.5
     cmd_vel.angular.z = 0.7
     cmd_vel_pub.publish(cmd_vel)
     rospy.sleep(request.duration)
     cmd_vel_pub.publish(Twist())
-    print("Circular motion stopped.")
+    rospy.loginfo("Circular motion stopped.")
     return DurationMessageResponse(success=True)
 
 circle_service = rospy.Service('/move_bb8_in_circle', DurationMessage, service_callback)
