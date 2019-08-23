@@ -1,2 +1,2 @@
 # ROS
-Robot Operating System assignments and projects
+Robot Operating System projects and examples
