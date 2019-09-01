@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import rospy
-from MiBand_HRX.base import MiBand2
-from MiBand_HRX.constants import ALERT_TYPES
+from x1_miband_control.MiBand_HRX.base import MiBand2
+from x1_miband_control.MiBand_HRX.constants import ALERT_TYPES
 from threading import Thread
 from generic_robot import Robot
 
