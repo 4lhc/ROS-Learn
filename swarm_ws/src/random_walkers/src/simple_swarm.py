@@ -39,7 +39,7 @@ class Robot:
         self.dist_to_obstacle_in_left = min(min(msg.ranges[20:45]), 10)
 
     def get_scenario(self):
-        ob_lim = 1 #obstacle distance
+        ob_lim = 0.5 #obstacle distance
         ob_f = self.dist_to_obstacle_in_front
         ob_l = self.dist_to_obstacle_in_left
         ob_r = self.dist_to_obstacle_in_right
@@ -150,7 +150,7 @@ if __name__ == "__main__":
     robots = []
     for i in range(1, 2):
         robo_name = "robot{}".format(i)
-        robot = RandomWalker(name=robo_name, lin_vel=0.75, ang_vel=1)
+        robot = RandomWalker(name=robo_name, lin_vel=0.5, ang_vel=1)
         robot.start_random_walk()
         robots.append(robot)
     try:
