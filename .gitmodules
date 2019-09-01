@@ -4,3 +4,6 @@
 [submodule "learning_ws/src/x1_miband_control/src/bluepy"]
 	path = learning_ws/src/x1_miband_control/src/bluepy
 	url = https://github.com/IanHarvey/bluepy
+[submodule "learning_ws/src/x1_miband_control/src/pycrypto"]
+	path = learning_ws/src/x1_miband_control/src/pycrypto
+	url = https://github.com/dlitz/pycrypto
