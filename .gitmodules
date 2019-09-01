@@ -1,0 +1,3 @@
+[submodule "learning_ws/src/MiBand_HRX"]
+	path = learning_ws/src/MiBand_HRX
+	url = https://github.com/4lhc/MiBand_HRX
