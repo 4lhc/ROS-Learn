@@ -1,0 +1,6 @@
+[submodule "learning_ws/src/x1_miband_control/src/MiBand_HRX"]
+	path = learning_ws/src/x1_miband_control/src/MiBand_HRX
+	url = https://github.com/4lhc/MiBand_HRX
+[submodule "learning_ws/src/x1_miband_control/src/bluepy"]
+	path = learning_ws/src/x1_miband_control/src/bluepy
+	url = https://github.com/IanHarvey/bluepy
