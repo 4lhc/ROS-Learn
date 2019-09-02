@@ -13,13 +13,13 @@ More information about BLE communication, parsing and processing raw acceleromet
 2) Including python scripts and modules to ROS packages
 
 ## TODO
-[] Automate build - Find a way for catkin_make to build the bluepy and pycrypto dependencies
-[] Try installing pycryptop using bulddep too
-[] BLE - Fix crash when sending alerts
+[ ] Automate build - Find a way for catkin_make to build the bluepy and pycrypto dependencies
+[ ] Try installing pycryptop using bulddep too
+[ ] BLE - Fix crash when sending alerts
 
 ## Setup
-
-### Setup package - [or clone this repo :) ]
+You can close this repo - but I will list the setup process here for posterity ;)
+### Setup package
 ```sh
 catkin_create_pkg x1_miband_control rospy
 cd x1_miband_control/src
