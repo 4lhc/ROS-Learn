@@ -14,11 +14,11 @@ More information about BLE communication, parsing and processing raw acceleromet
 
 ## TODO
 - [ ] Automate build - Find a way for catkin_make to build the bluepy and pycrypto dependencies
-- [ ] Try installing pycryptop using bulddep too
+- [ ] Try installing pycryptop using rosdep too
 - [ ] BLE - Fix crash when sending alerts
 
 ## Setup
-You can close this repo - but I will list the setup process here for posterity ;)
+You can clone this repo - but I will list the setup process here for posterity ;)
 ### Setup package
 ```sh
 catkin_create_pkg x1_miband_control rospy
