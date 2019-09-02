@@ -13,9 +13,9 @@ More information about BLE communication, parsing and processing raw acceleromet
 2) Including python scripts and modules to ROS packages
 
 ## TODO
-[ ] Automate build - Find a way for catkin_make to build the bluepy and pycrypto dependencies
-[ ] Try installing pycryptop using bulddep too
-[ ] BLE - Fix crash when sending alerts
+- [ ] Automate build - Find a way for catkin_make to build the bluepy and pycrypto dependencies
+- [ ] Try installing pycryptop using bulddep too
+- [ ] BLE - Fix crash when sending alerts
 
 ## Setup
 You can close this repo - but I will list the setup process here for posterity ;)
