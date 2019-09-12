@@ -261,65 +261,6 @@ class MobileRobot:
 
 
 
-    #ControlledMotion----------------------------------------------------------
-    def move_forward_dist(self, target_dist=1.0, use_accel=True):
-        """
-        Moves the robot for the specified distance in the +x direction
-
-        Args:
-            target_dist (float): The distance to move[m], (default 1.0)
-            use_accel (bool): Set True if acceleration to be used (default True)
-
-        Returns:
-            True:  if moved within positional tolerance
-        """
-
-        if not use_accel:
-            lx = self.get_dist_travelled()
-            while (lx < target_dist):
-                lx = self.get_dist_travelled()
-                self.cmd.linear.x = self.max_lin_vel
-                self.move()
-                rospy.sleep(self.sleep_time)
-            self.stop()
-            return True
-
-        l = target_dist
-        #acceleration stop pos
-        l1 = ((pow(self.max_lin_vel, 2) - pow(self.cmd.linear.x, 2))
-              /(2*self.max_lin_accel))
-        #decceleration start pos
-        l2 = l - (pow(self.max_lin_vel, 2))/(2*self.max_lin_deccel)
-        #expect negative value - what if distance is too short?
-        lx = self.get_dist_travelled() #dist travelled so far
-        while (lx < target_dist):
-            lx = self.get_dist_travelled()
-            if (lx > l2):
-                #If distance is too short for attaining max velocity,
-                #this will make sure that decceleration happens
-                # self.curr_lin_accel = -(self.max_lin_accel)
-                self.curr_lin_accel = -pow(self.odom.twist.twist.linear.x, 2)/(2*(l-lx))
-                #self.curr_lin_accel = -pow(self.odom.twist.twist.linear.y, 2)/(2*(l-lx)) #BB8 is weirdly oriented
-                if self.cmd.linear.x <= 0:
-                    break
-            elif (lx < l1):
-                self.curr_lin_accel = self.max_lin_accel
-            else:
-                self.curr_lin_accel = 0
-
-            self._set_vel_from_accel()
-            self.cmd.angular.z = 0
-            self.move()
-            rospy.sleep(self.sleep_time)
-            # p = "{:.4f} | {:.4f} | {:.4f} | {:.4f}".format(
-                    # self.get_dist_travelled(),
-                    # self.cmd.linear.x,
-                    # self.odom.twist.twist.linear.x,
-                    # self.curr_lin_accel)
-            # print(p)
-
-        return True
-
 
 
 if __name__ == "__main__":
