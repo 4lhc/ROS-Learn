@@ -58,6 +58,7 @@ find_package(catkin REQUIRED COMPONENTS
    FILES
    CustomServiceMessage.srv
    DurationMessage.srv
+   MyDist.srv
  )
 
 ## Generate actions in the 'action' folder
