@@ -11,6 +11,7 @@
 
 
 import rospy
+from math import radians
 # from geometry_msgs.msg import Twist, Pose, Point, Quaternion
 # from sensor_msgs.msg import LaserScan
 # from nav_msgs.msg import Odometry
@@ -84,31 +85,66 @@ class ControlledMobileRobot(MobileRobot):
             self.cmd.angular.z = 0
             self.move()
             rospy.sleep(self.sleep_time)
-            # p = "{:.4f} | {:.4f} | {:.4f} | {:.4f}".format(
-                    # self.get_dist_travelled(),
-                    # self.cmd.linear.x,
-                    # self.odom.twist.twist.linear.x,
-                    # self.curr_lin_accel)
-            # print(p)
+            p = "{:.4f} | {:.4f} | {:.4f} | {:.4f}".format(
+                    self.get_dist_travelled(),
+                    self.cmd.linear.x,
+                    self.odom.twist.twist.linear.x,
+                    self.curr_lin_accel)
+            print(p)
         return True
 
 
+    def turn_angle(self, angle=radians(90), relative=True):
+        """
+        Turn the robot a specified angle
+
+        Args:
+            angle (float): Angle[rad] (default radians(90))
+            relative (bool): If True, use relative positioning (default True)
+
+        Returns:
+            True if success
+        """
+        start_angle = self.get_orientation_euler()[2]
+        if relative:
+            target_angle = start_angle + angle
+        else:
+            target_angle = angle
+
+        if target_angle > radians(180):
+            target_angle -= radians(360)
+        print("start: {:.4f} target: {:.4f}".format(start_angle, target_angle))
+
+
+        curr_angle = self.get_orientation_euler()[2]
+        while abs(target_angle - curr_angle) > self.ang_tol:
+            curr_angle = self.get_orientation_euler()[2]
+            if target_angle < 0:
+                self.cmd.angular.z = (-1)*self.max_ang_vel
+            else:
+                self.cmd.angular.z = (1)*self.max_ang_vel
+            self.move()
+            rospy.sleep(self.sleep_time)
+            print("curr: {:.4f} target: {:.4f} ang.z: {:.4f}".format(curr_angle, target_angle, self.cmd.angular.z))
+        self.stop()
 
 
 
 if __name__ == "__main__":
     rospy.init_node('test_robot')
-    robot = ControlledMobileRobot(name="robot1", lin_vel=0.9)
-    robot.move_forward_dist(target_dist=5.0, use_accel=True)
-    robot.stop()
+    robot = ControlledMobileRobot(name="robot1", lin_vel=0.3)
+    # robot.move_forward_dist(target_dist=5.0, use_accel=True)
 
-    rospy.loginfo("curr_pose : :")
-    rospy.loginfo(robot.get_curr_pose())
-    rospy.loginfo("dist_travelled : : ")
-    rospy.loginfo(robot.get_dist_travelled())
-    rospy.loginfo("curr_position : : ")
-    rospy.loginfo(robot.get_curr_position())
-    robot.set_start_pose()
+    # robot.stop()
+
+    # rospy.loginfo("curr_pose : :")
+    # rospy.loginfo(robot.get_curr_pose())
+    # rospy.loginfo("dist_travelled : : ")
+    # rospy.loginfo(robot.get_dist_travelled())
+    # rospy.loginfo("curr_position : : ")
+    # rospy.loginfo(robot.get_curr_position())
+    # robot.set_start_pose()
+    robot.turn_angle(angle=radians(45), relative=True)
 
 
 
