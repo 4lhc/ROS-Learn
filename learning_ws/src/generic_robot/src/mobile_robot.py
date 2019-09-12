@@ -55,9 +55,18 @@ class MobileRobot:
 
         self.cmd = Twist()
         self.odom = Odometry()
-        self.lin_vel = lin_vel
-        self.ang_vel = ang_vel
-        self.sleep_time = 0.33
+        self.max_lin_vel = lin_vel
+        self.max_ang_vel = ang_vel
+
+        self.max_lin_accel =  0.3
+        self.max_lin_deccel =  0.1
+        self.curr_lin_accel =  0.1
+
+        self.max_ang_accel =  0.2
+        self.max_ang_deccel =  0.1
+        self.curr_ang_accel =  0.2
+
+        self.sleep_time = 0.02
         # self.pub_rate = rospy.Rate(2) #2Hz-publish to /cmd_vel twice every sec
         self.cmd_vel_pub = rospy.Publisher(self.cmd_vel_topic, Twist, queue_size=1)
 
@@ -79,7 +88,7 @@ class MobileRobot:
         self.laser_msg = msg
 
     def odom_callback(self, msg):
-        self.odom_msg = msg
+        self.odom = msg
         oq = msg.pose.pose.orientation #orientaiton in quaternion
         self.orientation_quaternion = [oq.x, oq.y, oq.z, oq.w]
         self.orientation_euler = euler_from_quaternion(self.orientation_quaternion)
@@ -121,7 +130,7 @@ class MobileRobot:
 
     def _wait_till_stop(self):
         """
-        Waits till the robot has stopped moving completely
+        Waits till the robot has stopped moving comlpletely
 
         The robot doesn't stop immediately after the stop() method has been called.
         This method is a helper to wait for a complete halt.
@@ -133,35 +142,50 @@ class MobileRobot:
             None
         """
         prev_pos = self.get_curr_position()
-        rospy.sleep(self.sleep_time)
+        rospy.sleep(self.sleep_time*10)
         curr_pos = self.get_curr_position()
         while (self._eucledian_dist(prev_pos, curr_pos) > self.pos_tol):
             #wait till positional tolerance achieved
-            rospy.sleep(self.sleep_time)
+            rospy.sleep(self.sleep_time*10)
             prev_pos = curr_pos
             curr_pos = self.get_curr_position()
+
+    def _set_vel_from_accel(self, linear=True, angular=False):
+        """
+        Helper to set velocity from the current acceleration
+
+        Args:
+            linear (bool): If True, calculates and sets the linear.x (default True)
+            angular (bool): If True, calculates & sets angular.z (default False)
+
+        Returns:
+            None
+        """
+        if linear:
+            self.cmd.linear.x += self.curr_lin_accel*self.sleep_time
+        if angular:
+            self.cmd.angular.z += self.curr_ang_accel*self.sleep_time
 
 
     #Getters-------------------------------------------------------------------
     def get_orientation_euler(self):
-        '''Returns: tuple (roll, pitch, yaw)'''
+        """Returns: tuple (roll, pitch, yaw)"""
         return self.orientation_euler
 
     def get_curr_pose(self):
-        '''Returns: geomtery_msgs/Pose'''
-        return self.odom_msg.pose.pose
+        """Returns: geomtery_msgs/Pose"""
+        return self.odom.pose.pose
 
     def get_curr_position(self):
-        '''Returns: geometry_msgs/Point'''
-        return self.odom_msg.pose.pose.position
+        """Returns: geometry_msgs/Point"""
+        return self.odom.pose.pose.position
 
     def get_dist_to(self, target_pos):
-        '''
+        """
         Args: geometry_msgs/Point target_pos
         Returns: float d - distance [m]
-        '''
+        """
         d = self._eucledian_dist(self.get_curr_position(), target_pos)
-        rospy.loginfo("Dist to {} = {}".format(target_pos, d))
         return d
 
     def get_dist_travelled(self):
@@ -194,6 +218,8 @@ class MobileRobot:
 
     def set_start_pose(self):
         '''Set the currrent pose as the start pose'''
+        self.curr_lin_accel = self.max_lin_accel
+        self.curr_ang_accel = self.max_ang_accel
         self.start_pose = self.get_curr_pose()
 
     #Motion--------------------------------------------------------------------
@@ -203,21 +229,21 @@ class MobileRobot:
     def turn_cw(self, ang_vel=None):
         '''cw'''
         rospy.loginfo("Turning right")
-        if not ang_vel: ang_vel = self.ang_vel
+        if not ang_vel: ang_vel = self.max_ang_vel
         self.cmd.angular.z = -abs(ang_vel)
         self.move()
 
     def turn_ccw(self, ang_vel=None):
         '''ccw'''
         rospy.loginfo("Turn Left")
-        if not ang_vel: ang_vel = self.ang_vel
+        if not ang_vel: ang_vel = self.max_ang_vel
         self.cmd.angular.z = abs(ang_vel)
         self.move()
 
     def move_forward(self):
         rospy.loginfo("Moving forward")
         self.cmd.angular.z = 0
-        self.cmd.linear.x = self.lin_vel
+        self.cmd.linear.x = self.max_lin_vel
         self.move()
 
     def stop(self, wait=True):
@@ -233,19 +259,73 @@ class MobileRobot:
             self._wait_till_stop()
             rospy.loginfo("Stopped...")
 
-    #Actions-------------------------------------------------------------------
 
 
+    #ControlledMotion----------------------------------------------------------
+    def move_forward_dist(self, target_dist=1.0, use_accel=True):
+        """
+        Moves the robot for the specified distance in the +x direction
+
+        Args:
+            target_dist (float): The distance to move[m], (default 1.0)
+            use_accel (bool): Set True if acceleration to be used (default True)
+
+        Returns:
+            True:  if moved within positional tolerance
+        """
+
+        if not use_accel:
+            lx = self.get_dist_travelled()
+            while (lx < target_dist):
+                lx = self.get_dist_travelled()
+                self.cmd.linear.x = self.max_lin_vel
+                self.move()
+                rospy.sleep(self.sleep_time)
+            self.stop()
+            return True
+
+        l = target_dist
+        #acceleration stop pos
+        l1 = ((pow(self.max_lin_vel, 2) - pow(self.cmd.linear.x, 2))
+              /(2*self.max_lin_accel))
+        #decceleration start pos
+        l2 = l - (pow(self.max_lin_vel, 2))/(2*self.max_lin_deccel)
+        #expect negative value - what if distance is too short?
+        lx = self.get_dist_travelled() #dist travelled so far
+        while (lx < target_dist):
+            lx = self.get_dist_travelled()
+            if (lx > l2):
+                #If distance is too short for attaining max velocity,
+                #this will make sure that decceleration happens
+                # self.curr_lin_accel = -(self.max_lin_accel)
+                self.curr_lin_accel = -pow(self.odom.twist.twist.linear.x, 2)/(2*(l-lx))
+                #self.curr_lin_accel = -pow(self.odom.twist.twist.linear.y, 2)/(2*(l-lx)) #BB8 is weirdly oriented
+                if self.cmd.linear.x <= 0:
+                    break
+            elif (lx < l1):
+                self.curr_lin_accel = self.max_lin_accel
+            else:
+                self.curr_lin_accel = 0
+
+            self._set_vel_from_accel()
+            self.cmd.angular.z = 0
+            self.move()
+            rospy.sleep(self.sleep_time)
+            # p = "{:.4f} | {:.4f} | {:.4f} | {:.4f}".format(
+                    # self.get_dist_travelled(),
+                    # self.cmd.linear.x,
+                    # self.odom.twist.twist.linear.x,
+                    # self.curr_lin_accel)
+            # print(p)
+
+        return True
 
 
 
 if __name__ == "__main__":
     rospy.init_node('test_robot')
-    robot = MobileRobot(name="robot1")
-    # robot.stop(wait)
-    # rospy.sleep(1)
-    robot.move_forward()
-    rospy.sleep(2)
+    robot = MobileRobot(name="robot1", lin_vel=0.9)
+    robot.move_forward_dist(target_dist=5.0, use_accel=True)
     robot.stop()
 
     rospy.loginfo("curr_pose : :")
@@ -254,14 +334,8 @@ if __name__ == "__main__":
     rospy.loginfo(robot.get_dist_travelled())
     rospy.loginfo("curr_position : : ")
     rospy.loginfo(robot.get_curr_position())
-
-    tp = Point(x=0, y=2, z=0)
-    robot.get_dist_to(tp)
-    robot.get_orientation_euler()
-    robot.get_steering_angle_to(tp)
-
     robot.set_start_pose()
-    robot.get_dist_travelled()
+
 
 
 
