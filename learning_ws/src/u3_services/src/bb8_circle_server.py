@@ -19,7 +19,7 @@ rospy.init_node('move_bb8_service_server')
 cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
 def service_callback(request):
     global cmd_vel_pub
-    rospy.loginfo("Reques from %s received", request._connection_header['callerid'])
+    rospy.loginfo("Request from %s received", request._connection_header['callerid'])
     rospy.loginfo("Duration: %d", request.duration)
     rospy.loginfo("Starting circular motion...")
     cmd_vel = Twist()
