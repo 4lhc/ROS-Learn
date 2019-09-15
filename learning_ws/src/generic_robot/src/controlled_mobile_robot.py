@@ -74,8 +74,6 @@ class ControlledMobileRobot(MobileRobot):
             lx = self.get_dist_travelled()
             if (lx > l2):
                 self.curr_lin_accel = -pow(self.odom.twist.twist.linear.x, 2)/(2*(l-lx)) #BB8 is weirdly oriented
-                if self.cmd.linear.x <= 0:
-                    break
             elif (lx < l1):
                 self.curr_lin_accel = self.max_lin_accel
             else:
@@ -85,6 +83,8 @@ class ControlledMobileRobot(MobileRobot):
             self.cmd.angular.z = 0
             self.move()
             rospy.sleep(self.sleep_time)
+            if self.cmd.linear.x <= 0:
+                break
             p = "{:.4f} | {:.4f} | {:.4f} | {:.4f}".format(
                     self.get_dist_travelled(),
                     self.cmd.linear.x,
@@ -111,21 +111,43 @@ class ControlledMobileRobot(MobileRobot):
         else:
             target_angle = angle
 
-        if target_angle > radians(180):
-            target_angle -= radians(360)
+
+        if abs(target_angle) > radians(180):
+            if target_angle < 0:
+                target_angle += radians(360)
+            else:
+                target_angle -= radians(360)
+
+        #if abs(destination - source) > 180, then go reverse for complement angle
+        if abs(target_angle - start_angle) > radians(180):
+            getdirangle = lambda a: (-a/abs(a), radians(360)-abs(a))
+        else:
+            getdirangle = lambda a: (a/abs(a), abs(a))
+        direction = getdirangle(target_angle - start_angle)[0]
+
+
+
         print("start: {:.4f} target: {:.4f}".format(start_angle, target_angle))
+
+        '''
+
+                if angle < 0:
+                    direction = -1
+                else:
+                    direction = 1
+
+        '''
+
 
 
         curr_angle = self.get_orientation_euler()[2]
+        print("curr: {:.4f} target: {:.4f} ang.z: {:.4f}".format(curr_angle, target_angle, self.cmd.angular.z))
         while abs(target_angle - curr_angle) > self.ang_tol:
             curr_angle = self.get_orientation_euler()[2]
-            if target_angle < 0:
-                self.cmd.angular.z = (-1)*self.max_ang_vel
-            else:
-                self.cmd.angular.z = (1)*self.max_ang_vel
+            self.cmd.angular.z = (direction)*self.max_ang_vel
             self.move()
             rospy.sleep(self.sleep_time)
-            print("curr: {:.4f} target: {:.4f} ang.z: {:.4f}".format(curr_angle, target_angle, self.cmd.angular.z))
+        print("curr: {:.4f} target: {:.4f} ang.z: {:.4f}".format(curr_angle, target_angle, self.cmd.angular.z))
         self.stop()
 
 
@@ -144,7 +166,19 @@ if __name__ == "__main__":
     # rospy.loginfo("curr_position : : ")
     # rospy.loginfo(robot.get_curr_position())
     # robot.set_start_pose()
-    robot.turn_angle(angle=radians(45), relative=True)
+    robot.set_start_pose()
+    for i in range(4):
+        robot.move_forward_dist(target_dist=1.0, use_accel=True)
+        # robot.move_forward()
+        # rospy.sleep(1.0/robot.max_lin_vel) #sleep to run 1m
+        robot.stop()
+
+        # robot.turn_angle(angle=radians(90), relative=True)
+        robot.turn_cw()
+        rospy.sleep(radians(90)/robot.max_ang_vel) #sleep to turn 90deg
+        robot.stop()
+        rospy.sleep(1)
+        robot.set_start_pose()
 
 
 
