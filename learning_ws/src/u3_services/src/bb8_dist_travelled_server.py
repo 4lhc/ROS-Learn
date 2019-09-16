@@ -24,7 +24,6 @@ class Robot(ControlledMobileRobot):
             conversion_factor = 1/1609.344
         elif request.units.lower() in ["meters", "m", "mts", "meter"]:
             conversion_factor = 1
-        # get_dist_travelled() calls _eucledian_dist() with arguments self.start_pose.position and self.get_current_position()
         dist = conversion_factor*self.get_dist_travelled()
         return MyDistResponse(dist=dist)
 
