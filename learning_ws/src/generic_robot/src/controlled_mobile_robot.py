@@ -73,7 +73,7 @@ class ControlledMobileRobot(MobileRobot):
         while (lx < target_dist):
             lx = self.get_dist_travelled()
             if (lx > l2):
-                self.curr_lin_accel = -pow(self.odom.twist.twist.linear.x, 2)/(2*(l-lx)) #BB8 is weirdly oriented
+                self.curr_lin_accel = -pow(self.odom.twist.twist.linear.y, 2)/(2*(l-lx)) #BB8 is weirdly oriented
             elif (lx < l1):
                 self.curr_lin_accel = self.max_lin_accel
             else:
@@ -88,7 +88,7 @@ class ControlledMobileRobot(MobileRobot):
             p = "{:.4f} | {:.4f} | {:.4f} | {:.4f}".format(
                     self.get_dist_travelled(),
                     self.cmd.linear.x,
-                    self.odom.twist.twist.linear.x,
+                    self.odom.twist.twist.linear.y,
                     self.curr_lin_accel)
             print(p)
         return True
@@ -153,11 +153,15 @@ class ControlledMobileRobot(MobileRobot):
 
 
 if __name__ == "__main__":
-    rospy.init_node('test_robot')
-    robot = ControlledMobileRobot(name="robot1", lin_vel=0.3)
-    # robot.move_forward_dist(target_dist=5.0, use_accel=True)
+    #reset Gazebo
+    from std_srvs.srv import Empty
+    gz_reset_world = rospy.ServiceProxy('/gazebo/reset_world', Empty)
+    gz_reset_sim = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
+    gz_reset_sim()
+    gz_reset_world()
 
-    # robot.stop()
+    rospy.init_node('test_robot')
+    robot = ControlledMobileRobot(name="bb8", lin_vel=0.3)
 
     # rospy.loginfo("curr_pose : :")
     # rospy.loginfo(robot.get_curr_pose())
@@ -172,10 +176,11 @@ if __name__ == "__main__":
         # robot.move_forward()
         # rospy.sleep(1.0/robot.max_lin_vel) #sleep to run 1m
         robot.stop()
+        rospy.sleep(1)
 
-        # robot.turn_angle(angle=radians(90), relative=True)
         robot.turn_cw()
-        rospy.sleep(radians(90)/robot.max_ang_vel) #sleep to turn 90deg
+        rospy.sleep(radians(45)/robot.max_ang_vel) #sleep to turn 90 (45??!?) deg
+        # robot.turn_angle(angle=radians(45), relative=True)
         robot.stop()
         rospy.sleep(1)
         robot.set_start_pose()
