@@ -1,0 +1,7 @@
+<launch>
+<node pkg="u3_services"
+      name="move_bb8_in_a_square"
+      type="move_bb8_in_a_square.py"
+      output="screen">
+</node>
+</launch>
