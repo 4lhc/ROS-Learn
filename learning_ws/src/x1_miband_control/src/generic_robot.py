@@ -21,6 +21,9 @@ class Robot:
                                         5: self.move_forward,
                                         6: self.turn_right,
                                         7: self.stop}
+        self.dist_to_obstacle_in_front = 10
+        self.dist_to_obstacle_in_left = 10
+        self.dist_to_obstacle_in_right = 10
 
 
 
