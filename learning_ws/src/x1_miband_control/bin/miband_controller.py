@@ -17,22 +17,34 @@ class MiBandController():
 
         self.t1 = Thread(target=self.start_data_realtime)
         self.prev_signal = (0, 0, 0)
+        self.alert_timer = True
 
     def accel_call_back(self, x):
         pass
+
+    def reset_alert_timer(self, duration=5):
+        """set attribure alert_time"""
+        time.sleep(duration)
+        self.alert_timer = True
+
+    def start_alert_timer(self):
+        self.alert_timer = False
+        self.t2 = Thread(target=self.alert_timer)
+
 
     def start_data_realtime(self):
         self.band.start_raw_data_realtime(self.accel_call_back)
 
     def start_control(self):
         rospy.loginfo("Starting Control")
-        self.t1.start()
+        # self.t1 = Thread(target=self.start_data_realtime)
+        # self.t1.start()
         while not self.band.is_realtime_stopped():
             self.vel_control()
-            if self.robot.get_scenario() == 7:
+            if self.robot.get_scenario() == 7 and self.alert_timer:
+                self.start_alert_timer() #wait for 5 secs before next alert
                 self.band.stop_realtime()
                 self.band.send_alert(ALERT_TYPES.MESSAGE)
-        self.robot.stop()
 
     def stop_control(self):
         self.band.stop_realtime()
@@ -55,11 +67,11 @@ class MiBandController():
 if __name__ == "__main__":
     rospy.init_node("miband_controller")
     micontrol = MiBandController(MAC="C5:64:8F:FC:47:F2")
-    while True:
-        try:
-            micontrol.start_control()
-        except KeyboardInterrupt:
-            micontrol.stop_control()
+    try:
+        micontrol.t1.start()
+        micontrol.start_control()
+    except KeyboardInterrupt:
+        micontrol.stop_control()
 
 
 
