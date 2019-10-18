@@ -232,13 +232,13 @@ class MobileRobot:
         if not ang_vel: ang_vel = self.max_ang_vel
         self.cmd.angular.z = -abs(ang_vel)
         self.move()
+        print("turning done")
 
     def turn_ccw(self, ang_vel=None):
         '''ccw'''
         rospy.loginfo("Turn Left")
         if not ang_vel: ang_vel = self.max_ang_vel
         self.cmd.angular.z = abs(ang_vel)
-        self.move()
 
     def move_forward(self):
         rospy.loginfo("Moving forward")
