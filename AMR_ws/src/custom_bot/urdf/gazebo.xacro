@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--Differential Drive Gaebo Elements-->
+<!--Author: Sreejith S-->
+<!--Date: Fri 15 May 2020 17:26:48 UTC-->
+
+<robot name="diff_drive_bot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!--If the <gazebo> tag is used without reference property, it is assumed-->
+    <!--the element is for the entire robot-->
+    <gazebo reference="base_link">
+        <material>Gazebo/Orange</material>
+    </gazebo>
+    <gazebo reference="right_wheel">
+        <material>Gazebo/Black</material>
+    </gazebo>
+    <gazebo reference="left_wheel">
+        <material>Gazebo/Black</material>
+    </gazebo>
+
+
+    <!--Adding Differential Drive PLugin-->
+    <gazebo>
+        <plugin filename="libgazebo_ros_diff_drive.so" name="differential_drive_controller">
+            <alwaysOn>true</alwaysOn>
+            <updateRate>20</updateRate>
+            <leftJoint>base_link_to_left_wheel</leftJoint>
+            <rightJoint>base_link_to_right_wheel</rightJoint>
+            <wheelSeparation>0.4</wheelSeparation>
+            <wheelDiameter>0.2</wheelDiameter>
+            <torque>0.1</torque>
+            <commandTopic>cmd_vel</commandTopic>
+            <odometryTopic>odom</odometryTopic>
+            <odometryFrame>odom</odometryFrame>
+            <robotBaseFrame>base_link</robotBaseFrame>
+        </plugin>
+    </gazebo>
+
+</robot>
+
