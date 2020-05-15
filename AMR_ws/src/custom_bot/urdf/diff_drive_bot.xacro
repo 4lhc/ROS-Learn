@@ -9,15 +9,18 @@
     <xacro:include filename="$(find custom_bot)/urdf/materials.xacro"/>
     <xacro:include filename="$(find custom_bot)/urdf/gazebo.xacro"/>
     <!--Properties-->
-    <xacro:property name="wheel_radius" value="4.4"/>
-    <xacro:property name="wheel_width" value="2.4"/>
+    <xacro:property name="wheel_radius" value="0.032"/>
+    <xacro:property name="wheel_width" value="0.025"/>
+    <xacro:property name="laser_radius" value="0.025"/>
+    <xacro:property name="laser_height" value="0.025"/>
+    <!--Macros-->
+    <xacro:macro name="cylinder_inertia" params="mass r l">
+        <inertia ixx="${mass*(3*r*r+l*l)/12}" ixy="0" ixz="0"
+            iyy="${mass*(3*r*r+l*l)/12}" iyz="0.0"
+            izz="${mass*(r*r)/2}"/>
+    </xacro:macro>
 
   <link name="base_footprint">
-    <!--<inertial>-->
-      <!--<mass value="0.0001"/>-->
-      <!--<origin xyz="0 0 0"/>-->
-      <!--<inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>-->
-    <!--</inertial>-->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
@@ -103,7 +106,7 @@
         <collision>
             <origin rpy="0 0 0" xyz="0 0 0.0125"/>
             <geometry>
-                <cylinder radius="0.032" length="0.025"/>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
             </geometry>
         </collision>
     </link>
@@ -124,7 +127,27 @@
         <collision>
             <origin rpy="0 0 0" xyz="0 0 0.0125"/>
             <geometry>
-                <cylinder radius="0.032" length="0.025"/>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="sensor_laser">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <cylinder radius="${laser_radius}" length="${laser_height}"/>
+            </geometry>
+            <material name="yellow"/>
+        </visual>
+        <inertial>
+            <mass value="1"/>
+            <xacro:cylinder_inertia mass="1" r="${laser_radius}" l="${laser_height}"/>
+        </inertial>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0.0125"/>
+            <geometry>
+                <cylinder radius="${laser_radius}" length="${laser_height}"/>
             </geometry>
         </collision>
     </link>
@@ -159,6 +182,13 @@
         <axis xyz="0 0 -1 "/>
         <parent link="base_link"/>
         <child link="left_wheel"/>
+    </joint>
+
+    <joint name="base_link_to_laser" type="fixed">
+        <origin rpy="0 0  0 " xyz="0.0 0.0 ${laser_height/2}"/>
+        <axis xyz="0 0 0 "/>
+        <parent link="base_link"/>
+        <child link="sensor_laser"/>
     </joint>
 
 </robot>
