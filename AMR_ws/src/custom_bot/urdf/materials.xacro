@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--Differential Drive Robot Materials Definition-->
+<!--Author: Sreejith S-->
+<!--Date: Fri 15 May 2020 17:26:48 UTC-->
+
+<robot name="diff_drive_bot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!--Materials color predefined-->
+  <material name="black">
+    <color rgba="0.0 0.0 0.0 1.0"/>
+  </material>
+  <material name="blue">
+    <color rgba="0 0 0.8 1.0"/>
+  </material>
+  <material name="green">
+    <color rgba="0.0 0.8 0.0 1.0"/>
+  </material>
+  <material name="red">
+    <color rgba="1.0 0 0 1.0"/>
+  </material>
+  <material name="white">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+</robot>
