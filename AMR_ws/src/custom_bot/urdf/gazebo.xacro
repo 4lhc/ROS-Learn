@@ -5,71 +5,110 @@
 
 <robot name="diff_drive_bot" xmlns:xacro="http://www.ros.org/wiki/xacro">
     <!--If the <gazebo> tag is used without reference property, it is assumed-->
-    <!--the element is for the entire robot-->
+        <!--the element is for the entire robot-->
 
-    <!--Materials-->
-    <gazebo reference="base_link">
-        <material>Gazebo/Orange</material>
-    </gazebo>
-    <gazebo reference="right_wheel">
-        <material>Gazebo/Black</material>
-    </gazebo>
-    <gazebo reference="left_wheel">
-        <material>Gazebo/Black</material>
-    </gazebo>
-    <gazebo reference="sensor_laser">
-        <material>Gazebo/Yellow</material>
+        <!--Materials-->
+        <gazebo reference="base_link">
+            <material>Gazebo/Orange</material>
+        </gazebo>
+        <gazebo reference="right_wheel">
+            <material>Gazebo/Black</material>
+        </gazebo>
+        <gazebo reference="left_wheel">
+            <material>Gazebo/Black</material>
+        </gazebo>
+        <gazebo reference="sensor_laser">
+            <material>Gazebo/Yellow</material>
+        </gazebo>
+
+        <!--Adding Differential Drive PLugin-->
+        <gazebo>
+            <plugin filename="libgazebo_ros_diff_drive.so" name="differential_drive_controller">
+                <alwaysOn>true</alwaysOn>
+                <updateRate>20</updateRate>
+                <leftJoint>base_link_to_left_wheel</leftJoint>
+                <rightJoint>base_link_to_right_wheel</rightJoint>
+                <wheelSeparation>0.4</wheelSeparation>
+                <wheelDiameter>0.2</wheelDiameter>
+                <torque>0.1</torque>
+                <commandTopic>cmd_vel</commandTopic>
+                <odometryTopic>odom</odometryTopic>
+                <odometryFrame>odom</odometryFrame>
+                <robotBaseFrame>base_footprint</robotBaseFrame>
+            </plugin>
+        </gazebo>
+
+        <!--Laser Scanner-->
+        <gazebo reference="sensor_laser">
+            <sensor type="ray" name="head_hokuyo_sensor">
+                <pose>0 0 0 0 0 0</pose>
+                <visualize>false</visualize>
+                <update_rate>20</update_rate>
+                <ray>
+                    <scan>
+                        <horizontal>
+                            <samples>720</samples>
+                            <resolution>1</resolution>
+                            <min_angle>-1.570796</min_angle>
+                            <max_angle>1.570796</max_angle>
+                        </horizontal>
+                    </scan>
+                    <range>
+                        <min>0.10</min>
+                        <max>10.0</max>
+                        <resolution>0.01</resolution>
+                    </range>
+                    <noise>
+                        <type>gaussian</type>
+                        <mean>0.0</mean>
+                        <stddev>0.01</stddev>
+                    </noise>
+                </ray>
+                <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+                    <topicName>/custom_bot/laser/scan</topicName>
+                    <frameName>sensor_laser</frameName>
+                </plugin>
+            </sensor>
+        </gazebo>
+
+    <!--Camera-->
+    <!--Ref: http://gazebosim.org/tutorials?tut=ros_gzplugins#Camera-->
+    <gazebo reference="sensor_camera">
+        <sensor type="camera" name="camera_front">
+            <update_rate>30.0</update_rate>
+            <camera name="head">
+                <horizontal_fov>1.3962634</horizontal_fov>
+                <image>
+                    <width>800</width>
+                    <height>800</height>
+                    <format>R8G8B8</format>
+                </image>
+                <clip>
+                    <near>0.02</near>
+                    <far>300</far>
+                </clip>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <stddev>0.007</stddev>
+                </noise>
+            </camera>
+            <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+                <alwaysOn>true</alwaysOn>
+                <updateRate>0.0</updateRate>
+                <cameraName>custom_bot/camera_front</cameraName>
+                <imageTopicName>image_raw</imageTopicName>
+                <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+                <frameName>sensor_camera</frameName>
+                <hackBaseline>0.07</hackBaseline>
+                <distortionK1>0.0</distortionK1>
+                <distortionK2>0.0</distortionK2>
+                <distortionK3>0.0</distortionK3>
+                <distortionT1>0.0</distortionT1>
+                <distortionT2>0.0</distortionT2>
+            </plugin>
+        </sensor>
     </gazebo>
 
-    <!--Adding Differential Drive PLugin-->
-    <gazebo>
-        <plugin filename="libgazebo_ros_diff_drive.so" name="differential_drive_controller">
-            <alwaysOn>true</alwaysOn>
-            <updateRate>20</updateRate>
-            <leftJoint>base_link_to_left_wheel</leftJoint>
-            <rightJoint>base_link_to_right_wheel</rightJoint>
-            <wheelSeparation>0.4</wheelSeparation>
-            <wheelDiameter>0.2</wheelDiameter>
-            <torque>0.1</torque>
-            <commandTopic>cmd_vel</commandTopic>
-            <odometryTopic>odom</odometryTopic>
-            <odometryFrame>odom</odometryFrame>
-            <robotBaseFrame>base_footprint</robotBaseFrame>
-        </plugin>
-    </gazebo>
-
-    <!--Laser Scanner-->
-    <gazebo reference="sensor_laser">
-    <sensor type="ray" name="head_hokuyo_sensor">
-      <pose>0 0 0 0 0 0</pose>
-      <visualize>false</visualize>
-      <update_rate>20</update_rate>
-      <ray>
-        <scan>
-          <horizontal>
-            <samples>720</samples>
-            <resolution>1</resolution>
-            <min_angle>-1.570796</min_angle>
-            <max_angle>1.570796</max_angle>
-          </horizontal>
-        </scan>
-        <range>
-          <min>0.10</min>
-          <max>10.0</max>
-          <resolution>0.01</resolution>
-        </range>
-        <noise>
-          <type>gaussian</type>
-          <mean>0.0</mean>
-          <stddev>0.01</stddev>
-        </noise>
-      </ray>
-      <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
-        <topicName>/custom_bot/laser/scan</topicName>
-        <frameName>sensor_laser</frameName>
-      </plugin>
-    </sensor>
-  </gazebo>
-
-</robot>
+    </robot>
 

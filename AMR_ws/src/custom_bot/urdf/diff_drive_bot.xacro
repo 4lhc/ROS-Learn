@@ -13,6 +13,8 @@
     <xacro:property name="wheel_width" value="0.025"/>
     <xacro:property name="laser_radius" value="0.025"/>
     <xacro:property name="laser_height" value="0.025"/>
+    <xacro:property name="camera_dim" value="0.02 0.03 0.02"/>
+    <xacro:property name="pi_rads" value="3.14159"/>
     <!--Macros-->
     <xacro:macro name="cylinder_inertia" params="mass r l">
         <inertia ixx="${mass*(3*r*r+l*l)/12}" ixy="0" ixz="0"
@@ -152,6 +154,26 @@
         </collision>
     </link>
 
+    <link name="sensor_camera">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <box size="${camera_dim}"/>
+            </geometry>
+            <material name="yellow"/>
+        </visual>
+        <inertial>
+            <mass value="1"/>
+            <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+        </inertial>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0.0125"/>
+            <geometry>
+                <box size="${camera_dim}"/>
+            </geometry>
+        </collision>
+    </link>
+
     <joint name="base_foorprint_to_base_link" type="fixed">
         <origin xyz="0 0 0.0512"/>
         <parent link="base_footprint"/>
@@ -189,6 +211,13 @@
         <axis xyz="0 0 0 "/>
         <parent link="base_link"/>
         <child link="sensor_laser"/>
+    </joint>
+
+    <joint name="base_link_to_camera" type="fixed">
+        <origin rpy="0 0 ${pi_rads}" xyz="-0.08 0.0 0.0"/>
+        <axis xyz="0 0 0 "/>
+        <parent link="base_link"/>
+        <child link="sensor_camera"/>
     </joint>
 
 </robot>
