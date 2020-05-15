@@ -4,7 +4,7 @@
 <!--Author: Sreejith S-->
 <!--Date: Mon 27 Apr 2020 14:39:24 UTC-->
 
-<robot name="robot1">
+<robot name="diff_drive_bot">
 
     <!--Materials color predefined-->
   <material name="black">
