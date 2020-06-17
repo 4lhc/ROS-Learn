@@ -193,14 +193,14 @@
     </joint>
 
     <joint name="base_link_to_right_wheel" type="continuous">
-        <origin rpy="1.57079632679 0  0 " xyz="0.0267 0.13 -0.02"/>
+        <origin rpy="-1.57079632679 0  0 " xyz="0.0267 -0.13 -0.02"/>
         <axis xyz="0 0 1 "/>
         <parent link="base_link"/>
         <child link="right_wheel"/>
     </joint>
 
     <joint name="base_link_to_left_wheel" type="continuous">
-        <origin rpy="-1.57079632679 0  0 " xyz="0.0267 -0.13 -0.02"/>
+        <origin rpy="1.57079632679 0  0 " xyz="0.0267 0.13 -0.02"/>
         <axis xyz="0 0 -1 "/>
         <parent link="base_link"/>
         <child link="left_wheel"/>
@@ -214,7 +214,7 @@
     </joint>
 
     <joint name="base_link_to_camera" type="fixed">
-        <origin rpy="0 0 ${pi_rads}" xyz="-0.08 0.0 0.0"/>
+        <origin rpy="0 0 -${pi_rads}" xyz="0.08 0.0 0.0"/>
         <axis xyz="0 0 0 "/>
         <parent link="base_link"/>
         <child link="sensor_camera"/>
