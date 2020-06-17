@@ -214,7 +214,7 @@
     </joint>
 
     <joint name="base_link_to_camera" type="fixed">
-        <origin rpy="0 0 ${pi_rads}" xyz="0.08 0.0 0.0"/>
+        <origin rpy="0 0 0" xyz="0.08 0.0 0.0"/>
         <axis xyz="0 0 0 "/>
         <parent link="base_link"/>
         <child link="sensor_camera"/>
