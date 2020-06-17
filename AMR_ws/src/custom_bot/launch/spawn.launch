@@ -1,7 +1,5 @@
-<?xml version="1.0"?>
 <launch>
   <arg name="model" default="diff_drive_bot"/>
-  <arg name="world" default="Project_maze.world"/>
   <arg name="x_pos" default="0.0"/>
   <arg name="y_pos" default="0.0"/>
   <arg name="z_pos" default="0.0"/>
@@ -9,7 +7,7 @@
 
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-      <arg name="world_name" value="$(find custom_bot)/worlds/$(arg world)"/>
+    <arg name="world_name" value="$(find custom_bot)/worlds/simple_maze.world"/>
     <arg name="paused" value="false"/>
     <arg name="use_sim_time" value="true"/>
     <arg name="gui" value="true"/>
@@ -20,8 +18,7 @@
 
   <!-- Convert the xacro and put on parameter server -->
   <!-- Run rosparam to inspect -->
-  <param name="robot_description"
-         command="$(find xacro)/xacro $(find custom_bot)/urdf/$(arg model).xacro" />
+  <param name="robot_description" command="$(find xacro)/xacro $(find custom_bot)/urdf/$(arg model).xacro" />
 
   <node name="custom_bot_spawn_urdf" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -model $(arg model) -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
