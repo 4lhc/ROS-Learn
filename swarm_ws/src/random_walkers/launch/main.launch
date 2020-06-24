@@ -3,12 +3,14 @@
  
   <!-- start world -->
   <node name="gazebo" pkg="gazebo_ros" type="gazebo" 
-   args="$(find turtlebot3_gazebo)/worlds/turtlebot3_world.world" respawn="false" output="screen" />
+   args="$(find random_walkers)/worlds/empty.world" respawn="false" output="screen" />
  
   <!-- start gui -->
   <!-- <node name="gazebo_gui" pkg="gazebo" type="gui" respawn="false" output="screen"/> -->
  
   <!-- include our robots -->
   <include file="$(find random_walkers)/launch/robots.launch"/>
+  <!--Start random walk-->
+  <include file="$(find random_walkers)/launch/random_walk.launch"/>
 
 </launch>

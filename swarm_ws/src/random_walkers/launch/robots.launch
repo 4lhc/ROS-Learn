@@ -5,11 +5,22 @@
   <param name="robot_description"
     command="$(find xacro)/xacro.py $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
  
+  <!-- BEGIN ROBOT 0-->
+  <group ns="robot0">
+    <param name="tf_prefix" value="robot0_tf" />
+    <include file="$(find random_walkers)/launch/one_robot.launch" >
+      <arg name="x_pos" value="0" />
+      <arg name="y_pos" value="2" />
+      <arg name="z_pos" value="0" />
+      <arg name="robot_name"  value="Robot0" />
+    </include>
+  </group>
+
   <!-- BEGIN ROBOT 1-->
   <group ns="robot1">
     <param name="tf_prefix" value="robot1_tf" />
-    <include file="$(find multi_robot)/launch/one_robot.launch" >
-      <arg name="x_pos" value="0.5" />
+    <include file="$(find random_walkers)/launch/one_robot.launch" >
+      <arg name="x_pos" value="0" />
       <arg name="y_pos" value="0" />
       <arg name="z_pos" value="0" />
       <arg name="robot_name"  value="Robot1" />
@@ -19,8 +30,8 @@
   <!-- BEGIN ROBOT 2-->
   <group ns="robot2">
     <param name="tf_prefix" value="robot2_tf" />
-    <include file="$(find multi_robot)/launch/one_robot.launch" >
-      <arg name="x_pos" value="-2" />
+    <include file="$(find random_walkers)/launch/one_robot.launch" >
+      <arg name="x_pos" value="-1" />
       <arg name="y_pos" value="1" />
       <arg name="z_pos" value="0" />
       <arg name="robot_name"  value="Robot2" />
@@ -30,9 +41,9 @@
   <!-- BEGIN ROBOT 3-->
   <group ns="robot3">
     <param name="tf_prefix" value="robot3_tf" />
-    <include file="$(find multi_robot)/launch/one_robot.launch" >
-      <arg name="x_pos" value="-2" />
-      <arg name="y_pos" value="0" />
+    <include file="$(find random_walkers)/launch/one_robot.launch" >
+      <arg name="x_pos" value="0" />
+      <arg name="y_pos" value="1" />
       <arg name="z_pos" value="0" />
       <arg name="robot_name"  value="Robot3" />
     </include>
@@ -41,9 +52,9 @@
   <!-- BEGIN ROBOT 4-->
   <group ns="robot4">
     <param name="tf_prefix" value="robot4_tf" />
-    <include file="$(find multi_robot)/launch/one_robot.launch" >
-      <arg name="x_pos" value="-2" />
-      <arg name="y_pos" value="-1" />
+    <include file="$(find random_walkers)/launch/one_robot.launch" >
+      <arg name="x_pos" value="1" />
+      <arg name="y_pos" value="1" />
       <arg name="z_pos" value="0" />
       <arg name="robot_name"  value="Robot4" />
     </include>
@@ -52,9 +63,9 @@
   <!-- BEGIN ROBOT 5-->
   <group ns="robot5">
     <param name="tf_prefix" value="robot5_tf" />
-    <include file="$(find multi_robot)/launch/one_robot.launch" >
-      <arg name="x_pos" value="-0.5" />
-      <arg name="y_pos" value="1" />
+    <include file="$(find random_walkers)/launch/one_robot.launch" >
+      <arg name="x_pos" value="-1" />
+      <arg name="y_pos" value="0" />
       <arg name="z_pos" value="0" />
       <arg name="robot_name"  value="Robot5" />
     </include>
@@ -63,8 +74,8 @@
   <!-- BEGIN ROBOT 6-->
   <group ns="robot6">
     <param name="tf_prefix" value="robot6_tf" />
-    <include file="$(find multi_robot)/launch/one_robot.launch" >
-      <arg name="x_pos" value="-0.5" />
+    <include file="$(find random_walkers)/launch/one_robot.launch" >
+      <arg name="x_pos" value="1" />
       <arg name="y_pos" value="0" />
       <arg name="z_pos" value="0" />
       <arg name="robot_name"  value="Robot6" />
@@ -74,11 +85,33 @@
   <!-- BEGIN ROBOT 7-->
   <group ns="robot7">
     <param name="tf_prefix" value="robot7_tf" />
-    <include file="$(find multi_robot)/launch/one_robot.launch" >
-      <arg name="x_pos" value="-0.5" />
+    <include file="$(find random_walkers)/launch/one_robot.launch" >
+      <arg name="x_pos" value="-1" />
       <arg name="y_pos" value="-1" />
       <arg name="z_pos" value="0" />
       <arg name="robot_name"  value="Robot7" />
+    </include>
+  </group>
+
+  <!-- BEGIN ROBOT 8-->
+  <group ns="robot8">
+    <param name="tf_prefix" value="robot8_tf" />
+    <include file="$(find random_walkers)/launch/one_robot.launch" >
+      <arg name="x_pos" value="0" />
+      <arg name="y_pos" value="-1" />
+      <arg name="z_pos" value="0" />
+      <arg name="robot_name"  value="Robot8" />
+    </include>
+  </group>
+
+  <!-- BEGIN ROBOT 9-->
+  <group ns="robot9">
+    <param name="tf_prefix" value="robot9_tf" />
+    <include file="$(find random_walkers)/launch/one_robot.launch" >
+      <arg name="x_pos" value="1" />
+      <arg name="y_pos" value="-1" />
+      <arg name="z_pos" value="0" />
+      <arg name="robot_name"  value="Robot9" />
     </include>
   </group>
 

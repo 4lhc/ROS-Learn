@@ -1,7 +1,7 @@
 <launch>
 
-  <node pkg="multi_robot" 
-        type="simpel_swarm.py"
+  <node pkg="random_walkers" 
+        type="simple_swarm.py"
         name="simple_swarm_node"
         output="screen" />
 

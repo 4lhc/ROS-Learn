@@ -1,23 +1,32 @@
 #!/usr/bin/env python
 
 import rospy
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import Twist, Point
 from sensor_msgs.msg import LaserScan
+from nav_msgs.msg import Odometry
+from graph_msgs.msg import GeometryGraph
 from itertools import cycle
 from random import choice
 import threading
+import itertools
 
 rospy.init_node("simple_swarm_node")
 
 class Robot:
+    newid = itertools.count().next
     def __init__(self, name="robot1", lin_vel=0.3, ang_vel=0.5):
         self.name = name
-        rospy.loginfo("Robot {} created".format(self.name))
+        self.id = Robot.newid()
+        self.graph_publishing = False
+        self.graph_publisher = None
+        rospy.loginfo("Robot {} created with id: {}".format(self.name, self.id))
         self.cmd_vel = Twist()
+        self.pose = Point()
         self.lin_vel = lin_vel
         self.ang_vel = ang_vel
         self.pub = rospy.Publisher("/{}/cmd_vel".format(name), Twist, queue_size=1)
         self.sub = rospy.Subscriber("/{}/scan".format(name), LaserScan, self.laser_callback)
+        self.sub = rospy.Subscriber("/{}/odom".format(name), Odometry, self.odom_callback)
         self.scenario_lookup_table = {  0: self.move_forward,
                                         1: self.turn_left,
                                         2: self.turn_right,
@@ -38,8 +47,21 @@ class Robot:
         self.dist_to_obstacle_in_right = min(min(msg.ranges[315:340]), 10)
         self.dist_to_obstacle_in_left = min(min(msg.ranges[20:45]), 10)
 
+    def odom_callback(self, msg):
+        if self.graph_publishing:
+            self.pose = msg.pose.pose.position
+            pub_msg = GeometryGraph()
+            pub_msg.id = self.id
+            pub_msg.node_coord = self.pose
+            self.graph_publisher.publish(pub_msg)
+
+
+    def set_graph_publishing(self, pub):
+        self.graph_publishing = True
+        self.graph_publisher = pub
+
     def get_scenario(self):
-        ob_lim = 0.5 #obstacle distance
+        ob_lim = 1.5 #obstacle distance
         ob_f = self.dist_to_obstacle_in_front
         ob_l = self.dist_to_obstacle_in_left
         ob_r = self.dist_to_obstacle_in_right
@@ -129,7 +151,7 @@ class RandomWalker(Robot):
     def obstacle_avoidance(self):
         while True:
             case = self.get_scenario()
-            if case == 1:
+            if case == 0:
                 cmd = choice(self.random_cmd_list) #no obstacle - do random walk
             else:
                 cmd = self.scenario_lookup_table[case]
@@ -147,12 +169,14 @@ class RandomWalker(Robot):
 
 
 if __name__ == "__main__":
+    graph_pub = rospy.Publisher("/random_walkers/graph", GeometryGraph, queue_size=1)
     robots = []
-    for i in range(1, 2):
+    for i in range(10):
         robo_name = "robot{}".format(i)
-        robot = RandomWalker(name=robo_name, lin_vel=0.5, ang_vel=1)
+        robot = RandomWalker(name=robo_name, lin_vel=0.9, ang_vel=1)
         robot.start_random_walk()
         robots.append(robot)
+        robot.set_graph_publishing(graph_pub)
     try:
         i = 10
         while i > 0:
