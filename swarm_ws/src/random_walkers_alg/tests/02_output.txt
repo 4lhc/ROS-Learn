@@ -1,0 +1,40 @@
+./test < 01_input.txt
+Enter No. of Nodes: 
+Enter the Graph (Adjacency List): 
+      S     A     G     B     C     D
+    -----------------------------------
+S  |  0  |  1  |  1  |  0  |  0  |  0  |
+    -----------------------------------
+A  |  1  |  0  |  0  |  1  |  1  |  0  |
+    -----------------------------------
+G  |  1  |  0  |  0  |  0  |  1  |  1  |
+    -----------------------------------
+B  |  0  |  1  |  0  |  0  |  0  |  1  |
+    -----------------------------------
+C  |  0  |  1  |  1  |  0  |  0  |  1  |
+    -----------------------------------
+D  |  0  |  0  |  1  |  1  |  1  |  0  |
+    -----------------------------------
+
+
+Recursive DFS Traversal
+Visited Node: S
+Visited Node: A
+Visited Node: B
+Visited Node: D
+Visited Node: G
+Visited Node: C
+
+
+Iterative BFS Traversal
+Exploring Node: S
+Found Node: A
+Found Node: G
+Exploring Node: A
+Found Node: B
+Found Node: C
+Exploring Node: G
+Found Node: D
+Exploring Node: B
+Exploring Node: C
+Exploring Node: D

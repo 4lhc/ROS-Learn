@@ -6,7 +6,7 @@ from sensor_msgs.msg import LaserScan
 from nav_msgs.msg import Odometry
 from graph_msgs.msg import GeometryGraph
 from itertools import cycle
-from random import choice
+from random import choice, randint
 import threading
 import itertools
 
@@ -17,6 +17,7 @@ class Robot:
     def __init__(self, name="robot1", lin_vel=0.3, ang_vel=0.5):
         self.name = name
         self.id = Robot.newid()
+        self.isPrime = randint(0,1)
         self.graph_publishing = False
         self.graph_publisher = None
         rospy.loginfo("Robot {} created with id: {}".format(self.name, self.id))
@@ -52,6 +53,7 @@ class Robot:
             self.pose = msg.pose.pose.position
             pub_msg = GeometryGraph()
             pub_msg.id = self.id
+            pub_msg.isPrime = self.isPrime
             pub_msg.node_coord = self.pose
             self.graph_publisher.publish(pub_msg)
 
