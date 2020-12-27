@@ -1,0 +1,3 @@
+<launch>
+	<node name="test_pkg_1_node" pkg="test_pkg_1" type="test_pkg_1_node"/>
+</launch>
