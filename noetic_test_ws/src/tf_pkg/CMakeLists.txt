@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf2_ros
   tf2_geometry_msgs
   geometry_msgs
+  nav_msgs
   roscpp
 )
 
@@ -139,6 +140,13 @@ include_directories(
 add_executable(${PROJECT_NAME}_quaternion src/quaternion_operations.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_quaternion
+  ${catkin_LIBRARIES}
+)
+
+
+add_executable(${PROJECT_NAME}_tf2_static_broadcaster src/tf2_static_broadcaster.cpp)
+target_link_libraries(
+  ${PROJECT_NAME}_tf2_static_broadcaster
   ${catkin_LIBRARIES}
 )
 
