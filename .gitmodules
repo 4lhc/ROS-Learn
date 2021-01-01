@@ -7,3 +7,12 @@
 [submodule "learning_ws/src/x1_miband_control/src/pycrypto"]
 	path = learning_ws/src/x1_miband_control/src/pycrypto
 	url = https://github.com/dlitz/pycrypto
+[submodule "noetic_test_ws/src/turtlebot3"]
+	path = noetic_test_ws/src/turtlebot3
+	url = https://github.com/ROBOTIS-GIT/turtlebot3.git
+[submodule "noetic_test_ws/src/turtlebot3_msgs"]
+	path = noetic_test_ws/src/turtlebot3_msgs
+	url = https://github.com/ROBOTIS-GIT/turtlebot3_msgs.git
+[submodule "noetic_test_ws/src/turtlebot3_simulations"]
+	path = noetic_test_ws/src/turtlebot3_simulations
+	url = https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
