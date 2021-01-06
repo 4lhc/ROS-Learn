@@ -1,5 +1,19 @@
 #include <ros/ros.h>
 
+class Light
+{
+  public:
+    void lightTimerCallback(const ros::TimerEvent& te);
+
+};
+
+void Light::lightTimerCallback(const ros::TimerEvent& te)
+{
+  ROS_INFO_STREAM("Class Method Timer callback triggered");
+
+}
+
+
 
 void timerCallback(const ros::TimerEvent& te)
 {
@@ -16,7 +30,10 @@ int main(int argc, char** argv)
   ros::init(argc, argv, "hw_node_name"); // intializing roscpp node
   ros::NodeHandle nh;
 
-    ros::Timer timer = nh.createTimer(ros::Duration(1.0), timerCallback);
+  ros::Timer timer = nh.createTimer(ros::Duration(4.0), timerCallback);
+
+  Light light_obj;
+  ros::Timer timer2 = nh.createTimer(ros::Duration(2.0), &Light::lightTimerCallback, &light_obj);
 
 
 
