@@ -147,6 +147,13 @@ target_link_libraries(
    ${catkin_LIBRARIES}
  )
 
+
+add_executable(${PROJECT_NAME}_timer_node src/${PROJECT_NAME}_timer_node.cpp)
+target_link_libraries(
+     ${PROJECT_NAME}_timer_node
+   ${catkin_LIBRARIES}
+ )
+
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
