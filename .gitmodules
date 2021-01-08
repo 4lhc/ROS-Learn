@@ -10,3 +10,9 @@
 [submodule "noetic_test_ws/src/turtlebot3_simulations"]
 	path = noetic_test_ws/src/turtlebot3_simulations
 	url = https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
+[submodule "AMR_ws/src/follow_waypoints"]
+	path = AMR_ws/src/follow_waypoints
+	url = git@github.com:danielsnider/follow_waypoints.git
+[submodule "AMR_ws/src/aruco_ros"]
+	path = AMR_ws/src/aruco_ros
+	url = git@github.com:pal-robotics/aruco_ros.git
