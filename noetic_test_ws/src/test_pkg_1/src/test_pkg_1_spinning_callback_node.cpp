@@ -1,6 +1,6 @@
 #include <ros/ros.h>
 #include <ros/callback_queue.h>
-#include <timer_options.h>
+#include <ros/timer_options.h>
 
 void timerCallback(const ros::TimerEvent& te)
 {
