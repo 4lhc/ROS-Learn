@@ -1600,6 +1600,7 @@
       <static>1</static>
     </model>
     <wind/>
+
     <model name='Marker_210'>
       <static>1</static>
       <link name='link'>
@@ -1685,5 +1686,6 @@
       </link>
       <pose>5.4922 -8.35044 0 0 -0 0</pose>
     </model>
+
   </world>
 </sdf>

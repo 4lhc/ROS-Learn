@@ -32,4 +32,9 @@
     <!--Rviz-->
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 
+  <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui" required="true" />
+
+  <include file="$(find custom_bot)/launch/marker_publisher.launch">
+  </include>
+
 </launch>
