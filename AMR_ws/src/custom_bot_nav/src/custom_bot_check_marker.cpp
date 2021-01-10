@@ -1,3 +1,19 @@
+/*
+ *      waypoints
+ *      frame_id: "odom"
+ *      2, 0, 0, 0, 0, 0, 1
+ *      1.75, -6, 0, 0, 0, -0.9, 0.4
+ *      3.8, -7.6, 0, 0, 0, -0.3, 0.9
+ *      6.7, -9.4, 0, 0, 0, 0.9, 0.3
+ *      3.7, -10, 0.0, 0., 0, 0.88, 0.4
+ *
+ *
+ *
+ *
+ */
+
+
+
 #include <ros/ros.h>
 #include <map>
 #include <std_msgs/UInt32MultiArray.h>
