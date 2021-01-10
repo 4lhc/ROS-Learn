@@ -1,11 +1,12 @@
 <launch>
   <arg name="model" default="diff_drive_bot"/>
-  <arg name="world" default="Project_maze.world"/>
+  <arg name="world" default="aruco_marker_maze.world"/>
+  <!-- <arg name="world" default="Project_maze.world"/> -->
   <arg name="x_pos" default="0.0"/>
   <arg name="y_pos" default="0.0"/>
   <arg name="z_pos" default="0.0"/>
-  <arg name="rvizconfig" default="$(find custom_bot)/rviz/urdf.rviz"/>
-
+  <arg name="open_rviz" default="true"/>
+  <arg name="rvizconfig" default="$(find custom_bot)/rviz/amcl.rviz" />
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find custom_bot)/worlds/$(arg world)"/>
@@ -29,8 +30,12 @@
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
   <!--<node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />-->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
-    <!--Rviz-->
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)">
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find custom_bot_nav)/rviz/amcl.rviz"/>
+  </group>
 
   <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui" required="true" />
 

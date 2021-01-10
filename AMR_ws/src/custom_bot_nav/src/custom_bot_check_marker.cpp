@@ -8,8 +8,6 @@
  *      3.7, -10, 0.0, 0., 0, 0.88, 0.4
  *
  *
- *
- *
  */
 
 
@@ -18,6 +16,8 @@
 #include <map>
 #include <std_msgs/UInt32MultiArray.h>
 #include <algorithm>
+#include <move_base_msgs/MoveBaseAction.h>
+#include <actionlib/client/simple_action_client.h>
 
 class MarkerCounter{
         public:
@@ -26,6 +26,7 @@ class MarkerCounter{
                 void markerCheckTimerCallBack(const ros::TimerEvent& te);
 
         private:
+                //TODO: read from rosparam
                 std::map<int, bool> marker_check{{210, false},
                                      {220, false},
                                      {230, false},
@@ -55,10 +56,6 @@ void MarkerCounter::markerCallBack(const std_msgs::UInt32MultiArray::ConstPtr& m
 void MarkerCounter::markerCheckTimerCallBack(const ros::TimerEvent& te)
 {
         // Check periodically, if all markers found
-        // for(auto& [key, value] : marker_check)
-        // {
-        //      ROS_INFO_STREAM("marker_" << key << ", status: " << value);
-        // }
 
         if (std::all_of(marker_check.begin(), marker_check.end(), [](const auto& e){return e.second;}))
         {
