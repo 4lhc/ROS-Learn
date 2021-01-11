@@ -9,3 +9,11 @@ msg_gen/
 srv_gen/
 *.pyc
 *~
+.cache
+.catkin_tools
+*.workspace
+*.workspace.user
+compile_commands.json
+debug
+logs
+
