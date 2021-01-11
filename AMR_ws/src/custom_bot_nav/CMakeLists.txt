@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
   std_msgs
+  actionlib
 )
 
 ## System dependencies are found with CMake's conventions
