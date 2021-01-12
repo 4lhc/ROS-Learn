@@ -1,0 +1,11 @@
+<launch>
+
+	<!-- Load waypoints -->
+	<rosparam command="load" file="$(find custom_bot_nav)/param/waypoints.yaml"/>
+	<!-- Load Arucomarker information -->
+	<rosparam command="load" file="$(find custom_bot_nav)/param/markers.yaml"/>
+
+  <!--Spawn, AMCL and move_base -->
+	<include file="$(find custom_bot_nav)/launch/amcl.launch"/>
+
+</launch>
