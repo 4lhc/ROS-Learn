@@ -1,0 +1,24 @@
+aruco_detection:
+  num_of_markers: 5
+  markers:
+    marker1:
+        id: 210
+        position: [2.0, 0.0, 0.0]
+        orientation: [0.0, 0.0, 0.0, 1]
+    marker2:
+        id: 220
+        position: [2.0, 0.0, 0.0]
+        orientation: [0.0, 0.0, 0.0, 1]
+    marker3:
+        id: 230
+        position: [2.0, 0.0, 0.0]
+        orientation: [0.0, 0.0, 0.0, 1]
+    marker4:
+        id: 240
+        position: [2.0, 0.0, 0.0]
+        orientation: [0.0, 0.0, 0.0, 1]
+    marker5:
+        id: 250
+        position: [2.0, 0.0, 0.0]
+        orientation: [0.0, 0.0, 0.0, 1]
+
