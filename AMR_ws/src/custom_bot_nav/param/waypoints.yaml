@@ -1,24 +1,23 @@
 waypoints:
   num_of_waypoints: 5
-  waypoints:
-    waypoint1:
-        id: 210
-        position: [2.0, 0.0, 0.0]
-        orientation: [0.0, 0.0, 0.0, 1]
-    waypoint2:
-        id: 220
-        position: [2.0, 0.0, 0.0]
-        orientation: [0.0, 0.0, 0.0, 1]
-    waypoint3:
-        id: 230
-        position: [2.0, 0.0, 0.0]
-        orientation: [0.0, 0.0, 0.0, 1]
-    waypoint4:
-        id: 240
-        position: [2.0, 0.0, 0.0]
-        orientation: [0.0, 0.0, 0.0, 1]
-    waypoint5:
-        id: 250
-        position: [2.0, 0.0, 0.0]
-        orientation: [0.0, 0.0, 0.0, 1]
+  waypoint0:
+      id: 210
+      position: [2.0, 0.0, 0.0]
+      orientation: [0.0, 0.0, 0.0, 1]
+  waypoint1:
+      id: 220
+      position: [2.0, -7.0, 0.0]
+      orientation: [0.0, 0.0, 1.0, 0]
+  waypoint2:
+      id: 230
+      position: [4.0, -8.0, 0.0]
+      orientation: [0.0, 0.0, 0.0, 1]
+  waypoint3:
+      id: 240
+      position: [3.0, -10.0, 0.0]
+      orientation: [0.0, 0.0, 0.73, 0.68]
+  waypoint4:
+      id: 250
+      position: [8.0, -8.8, 0.0]
+      orientation: [0.0, 0.0, 0.99, 0.11]
 
