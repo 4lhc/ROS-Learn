@@ -1,0 +1,7 @@
+
+<launch>
+
+	<node name="custom_bot_nav_waypoints_node" pkg="custom_bot_nav" type="custom_bot_nav_waypoints_node"/>
+	<node name="custom_bot_nav_check_marker_node" pkg="custom_bot_nav" type="custom_bot_nav_check_marker_node"/>
+
+</launch>
