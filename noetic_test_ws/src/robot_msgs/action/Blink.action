@@ -1,0 +1,11 @@
+# Action to blink and LED
+#
+# Num of times to blink
+uint32 blink_count
+---
+# Result
+bool status
+---
+# Feedback - Progress
+uint32 blinked_times
+
