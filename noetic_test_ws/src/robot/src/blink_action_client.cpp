@@ -6,7 +6,7 @@ using BlinkClient = actionlib::SimpleActionClient<robot_msgs::BlinkAction>;
 
 int main(int argc, char** argv)
 {
-	ros::init(argc, argv, "BlinkClient");
+	ros::init(argc, argv, "blink_action_client");
 	BlinkClient client("blink", true);
 	client.waitForServer();
 	robot_msgs::BlinkGoal goal;
